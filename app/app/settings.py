@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'accounts.apps.AccountsConfig',
+    'main.apps.MainConfig',
+    'api.apps.ApiConfig',
 ]
 
 INSTALLED_APPS = ['django_db_prefix', ] + INSTALLED_APPS
@@ -74,6 +78,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+
+AUTH_USER_MODEL = "accounts.CreateUser"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

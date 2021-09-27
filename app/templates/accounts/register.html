@@ -1,0 +1,6 @@
+{% extends 'main/base.html' %}{% load static %}{% block accounts_blocks %}
+<form action="{% url 'accounts:register' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %} {{ register_form.as_p }}
+    <button type="submit">Upload</button>
+</form>
+{% endblock accounts_blocks %}
