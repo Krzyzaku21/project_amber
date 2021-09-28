@@ -1,14 +1,13 @@
-from rest_framework.decorators import api_view
 from ..utils import get_register, post_register
-from rest_framework.renderers import TemplateHTMLRenderer
-# Create your views here.
+from rest_framework.generics import GenericAPIView
+from ..serializers import RegisterSerializer
 
 
-@api_view(['GET', 'POST'])
-def api_register(request):
+class RegisterAPI(GenericAPIView):
+    serializer_class = RegisterSerializer
 
-    if request.method == 'GET':
+    def get(self, request):
         return get_register(request)
 
-    if request.method == 'POST':
+    def post(self, request):
         return post_register(request)

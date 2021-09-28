@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_swagger',
     'accounts.apps.AccountsConfig',
     'main.apps.MainConfig',
     'api.apps.ApiConfig',
+    'drf_yasg',
 ]
 
 INSTALLED_APPS = ['django_db_prefix', ] + INSTALLED_APPS
@@ -81,6 +83,10 @@ WSGI_APPLICATION = 'app.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.OpenAPIRenderer',
+        'rest_framework_swagger.renderers.SwaggerUIRenderer',
     ]
 }
 
@@ -89,7 +95,7 @@ AUTH_USER_MODEL = "accounts.CreateUser"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DB_PREFIX = "practice_amber_"
+DB_PREFIX = "amber_"
 
 
 DATABASES = {
@@ -100,6 +106,7 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': 3306,
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 

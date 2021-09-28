@@ -1,34 +1,24 @@
-from django.forms import *
+from django import forms
 from ..models import CreateUser
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 
-class RegisterUserForm(ModelForm):
+class RegisterUserForm(forms.ModelForm):
 
-    password = CharField(label="Password")
-    password2 = CharField(label="Password repeat")
+    password = forms.CharField(label="Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Password repeat", widget=forms.PasswordInput)
 
     class Meta:
         model = CreateUser
         fields = ['first_name', 'last_name', 'date_of_birth', 'email', 'password', 'password2', 'avatar']
-        widgets = {
-            'password': PasswordInput,
-            'password2': PasswordInput,
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        del self.fields['password2']
 
     def clean_password2(self):
-        password = self.cleaned_data.get("password")
-        password2 = self.cleaned_data.get("password2")
-        if password and password2 and password != password2:
-            raise forms.ValidationError(
-                self.error_messages['password_mismatch'],
-                code='password_mismatch',
-            )
-        return password
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        password2 = cleaned_data.get("password2")
+        if password is not None and password != password2:
+            self.add_error("password2", "Your passwords must match")
+        return cleaned_data
 
     def save(self, commit=True):
         user = super(RegisterUserForm, self).save(commit=False)
@@ -38,23 +28,12 @@ class RegisterUserForm(ModelForm):
         return user
 
 
-class RegisterChangeForm(ModelForm):
+class UserAdminChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
         model = CreateUser
-        fields = ['first_name', 'last_name', 'date_of_birth', 'email',
-                  'password', 'password2', 'avatar', 'is_active', 'is_admin']
+        fields = ['email', 'password', 'is_active']
 
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            del self.fields['password2']
-
-        def __init__(self, *args, **kwargs):
-            super(RegisterChangeForm, self).__init__(*args, **kwargs)
-            f = self.fields.get('user_permissions', None)
-            if f is not None:
-                f.queryset = f.queryset.select_related('content_type')
-
-        def clean_password(self):
-            return self.initial['password']
+    def clean_password(self):
+        return self.initial["password"]

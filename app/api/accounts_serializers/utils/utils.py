@@ -6,12 +6,9 @@ from rest_framework import status
 
 def get_register(request):
     try:
-        register = CreateUser.objects.all().order_by('-date_joined')
+        register = CreateUser.objects.all()
         serializer = RegisterSerializer(register, many=True)
-        context = {
-            'serializer_form': serializer.data,
-        }
-        return Response(context)
+        return Response(serializer.data)
     except CreateUser.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -29,8 +26,8 @@ def post_register(request):
             data['email'] = account.email
             data['avatar'] = account.avatar
             data['password'] = account.password
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            data = serializer.errors
-        return Response(data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except CreateUser.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)

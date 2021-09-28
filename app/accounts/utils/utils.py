@@ -1,5 +1,5 @@
 from ..forms import RegisterUserForm
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 
 
 def post_register_add(request):
@@ -9,10 +9,11 @@ def post_register_add(request):
         new_user = register_form.save(commit=False)
         new_user.set_password(register_form.cleaned_data['password'])
         new_user.save()
-        context = {
-            'register_form': register_form,
-        }
-        return render(request, template_name, context)
+        return HttpResponse("You are registered")
+    context = {
+        'register_form': register_form,
+    }
+    return render(request, template_name, context)
 
 
 def get_register_add(request):
