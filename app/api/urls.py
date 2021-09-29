@@ -3,7 +3,10 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from .accounts_serializers import views
 from django.urls import path
-
+from rest_framework_simplejwt.views import (
+    TokenObtainSlidingView,
+    TokenRefreshSlidingView,
+)
 app_name = "api"
 
 schema_view = get_schema_view(
@@ -21,6 +24,13 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("api_register/", views.RegisterAPI.as_view(), name="api_register"),
-    path('swagger/', schema_view.with_ui('swagger',
-                                         cache_timeout=0), name='schema-swagger-ui'),
+    path('', schema_view.with_ui('swagger',
+                                 cache_timeout=0), name='schema-swagger-ui'),
+
+    path('api.json/', schema_view.without_ui(cache_timeout=0),
+         name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc',
+                                       cache_timeout=0), name='schema-redoc'),
+    path('api_login/', TokenObtainSlidingView.as_view(), name='token_obtain'),
+    path('api_login/refresh/', TokenRefreshSlidingView.as_view(), name='token_refresh'),
 ]

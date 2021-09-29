@@ -1,5 +1,6 @@
 from ..utils import get_register, post_register
 from rest_framework.generics import GenericAPIView
+from rest_framework.views import APIView
 from ..serializers import RegisterSerializer
 
 

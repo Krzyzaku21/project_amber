@@ -33,11 +33,11 @@ class CreateUserManager(BaseUserManager):
 
 
 class CreateUser(AbstractBaseUser, PermissionsMixin):
-    first_name = models.CharField(max_length=150, blank=True, null=True)
-    last_name = models.CharField(max_length=150, blank=True, null=True)
-    date_of_birth = models.DateField(null=True)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+    date_of_birth = models.DateField(blank=True)
     date_joined = models.DateTimeField(blank=False, default=timezone.now)
-    username = models.CharField(max_length=150, blank=True, null=True)
+    username = models.CharField(max_length=150, blank=True)
     email = models.EmailField(max_length=150, blank=False, unique=True)
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)

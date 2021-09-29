@@ -10,7 +10,7 @@ def get_register(request):
         serializer = RegisterSerializer(register, many=True)
         return Response(serializer.data)
     except CreateUser.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 
 def post_register(request):
