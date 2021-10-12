@@ -1,25 +1,32 @@
-from ..forms import RegisterUserForm
-from django.shortcuts import render, HttpResponse
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.utils import timezone
+from datetime import timedelta
+from django.contrib.auth import get_user_model
 
 
-def post_register_add(request):
-    template_name = 'accounts/register.html'
-    register_form = RegisterUserForm(request.POST)
-    if register_form.is_valid():
-        new_user = register_form.save(commit=False)
-        new_user.set_password(register_form.cleaned_data['password'])
-        new_user.save()
-        return HttpResponse("You are registered")
-    context = {
-        'register_form': register_form,
-    }
-    return render(request, template_name, context)
+class Util:
 
+    @staticmethod
+    def send_mail(to_email, context):
+        html_template = strip_tags(render_to_string('accounts/register_email_send.html', {
+            'token': context['token'],
+            'domain': context['domain'],
+        }))
+        email = EmailMessage(
+            subject='This is register email',
+            body=html_template,
+            to=[to_email],
+        )
+        email.send()
 
-def get_register_add(request):
-    template_name = 'accounts/register.html'
-    register_form = RegisterUserForm()
-    context = {
-        'register_form': register_form,
-    }
-    return render(request, template_name, context)
+    @staticmethod
+    def remove_user_time():
+        User = get_user_model()
+        users = User.objects.all()
+        for user in users:
+            ten_minutes_later = (user.date_joined + timedelta(hours=0.05))
+            if ten_minutes_later < timezone.now():
+                if user.is_verified == False:
+                    user.delete()

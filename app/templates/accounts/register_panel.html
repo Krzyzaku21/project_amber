@@ -1,0 +1,19 @@
+{% load rest_framework %}
+
+<html>
+    <body>
+        <form action="{% url 'accounts:register_panel' %}" method="POST">
+            {% csrf_token %} {% comment %} all field {% endcomment %}
+            <p>{% comment %} {% csrf_token %} {% render_form register_form %} {% endcomment %}</p>
+            {% comment %} one field {% endcomment %}
+            <p>{% comment %} {% render_field register_form.first_name style=style %} {% endcomment %}</p>
+            <ol>
+                {% for field_item in register_form %}
+                <li>{% render_field field_item style=style %}</li>
+                {% endfor %}
+            </ol>
+
+            <input type="submit" value="Save" />
+        </form>
+    </body>
+</html>

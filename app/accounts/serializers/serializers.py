@@ -1,15 +1,10 @@
 from rest_framework import serializers
 from accounts.models import CreateUser
-from rest_framework.validators import UniqueValidator
-from django.contrib.auth.password_validation import validate_password
+
 
 class RegisterSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-            required=True,
-            validators=[UniqueValidator(queryset=CreateUser.objects.all())]
-            )
-    password = serializers.CharField(required=True, write_only=True, validators=[validate_password])
-    password2 = serializers.CharField(required=True, write_only=True)
+    password = serializers.CharField(required=True, write_only=True, style={'input_type': 'password'})
+    password2 = serializers.CharField(required=True, write_only=True, style={'input_type': 'password'})
 
     class Meta:
         model = CreateUser
@@ -34,3 +29,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         createuser.set_password(self.validated_data['password'])
         createuser.save()
         return createuser
+
+
+class EmailVerifiSerializer(serializers.ModelSerializer):
+    token = serializers.CharField(max_length=555)
+
+    class Meta:
+        model = CreateUser
+        fields = ['token']

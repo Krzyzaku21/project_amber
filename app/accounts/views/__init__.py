@@ -1,5 +1,7 @@
 from .views import *
 
 __all__ = [
-    register,
+    RegisterAPI,
+    EmailVerifiAPI,
+    LoginAPI,
 ]
