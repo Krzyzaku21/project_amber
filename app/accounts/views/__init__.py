@@ -4,4 +4,5 @@ __all__ = [
     RegisterAPI,
     EmailVerifiAPI,
     LoginAPI,
+    LogoutAPI,
 ]

@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserAdminChangeForm
 from accounts.serializers import RegisterSerializer
 from .models import CreateUser
-
+from rest_framework_simplejwt import token_blacklist
 # Register your models here.
 
 
@@ -32,4 +32,14 @@ class AdminUser(BaseUserAdmin):
 
 
 admin.site.register(CreateUser, AdminUser)
-admin.site.unregister(Group)
+# admin.site.unregister(Group)
+
+
+class OutstandingTokenAdmin(token_blacklist.admin.OutstandingTokenAdmin):
+
+    def has_delete_permission(self, *args, **kwargs):
+        return True  # or whatever logic you want
+
+
+admin.site.unregister(token_blacklist.models.OutstandingToken)
+admin.site.register(token_blacklist.models.OutstandingToken, OutstandingTokenAdmin)

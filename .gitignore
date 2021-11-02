@@ -139,3 +139,7 @@ cython_debug/
 staticfiles
 install.txt
 .env
+
+# VSCode
+vscode
+.vscode
