@@ -1,0 +1,17 @@
+{% extends "main/base.html" %}
+{% block accounts_blocks %}
+{% load static %}
+
+{% load rest_framework %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <ol>
+            {% render_field serializer.email style=style %}
+            {% render_field serializer.password style=style %}
+            </ol>
+
+            <input type="submit" value="Save"></input>
+        </form>
+
+{% endblock accounts_blocks %}

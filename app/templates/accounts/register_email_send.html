@@ -1,0 +1,5 @@
+{% autoescape off %} Hi Please click on the link to confirm your registration,
+<br />
+http://{{ domain }}{% url 'accounts:register_email_response' token=token %}
+<br />
+{% endautoescape %}

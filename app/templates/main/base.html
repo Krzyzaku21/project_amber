@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title></title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="" />
+    </head>
+    <body>
+        <p>hello in main page</p>
+        <p>
+            {% if user.is_authenticated %} {{user.email}}
+            <button class="btn btn-primary"><a href="{% url 'accounts:logout_panel' %}">Wyloguj</a></button>
+            {% else %} no login user {% endif %}
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </p>
+        {% block accounts_blocks %} {% endblock accounts_blocks %}
+    </body>
+</html>
